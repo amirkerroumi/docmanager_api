@@ -11,6 +11,14 @@
 |
 */
 
-$app->get('/', function () use ($app) {
-    return $app->version();
-});
+$app->get('/', function () use ($app) { return $app->version(); });
+
+$app->group(
+    ['prefix' => 'v1', 'middleware' => 'auth'], function () use ($app) {
+
+    $app->get('/helloWorld', function ()    {
+        // Uses Auth Middleware
+        return "helloWorld";
+        });
+    }
+);

@@ -28,7 +28,7 @@ class AuthServiceProvider extends ServiceProvider
         //We are defining an Auth guard driver called my_api_guard
         $this->app['auth']->viaRequest('my_api_guard', function ($request) {
             /*
-             * If the https request contains a URI parameter called api_token that has the same value as
+             * If the http request contains a URI parameter called api_token that has the same value as
              * the environment variable called API_TOKEN stored in the .env file of the project, then we allow access
              * otherwise an unauthorized msg will be displayed by Lumen
              */

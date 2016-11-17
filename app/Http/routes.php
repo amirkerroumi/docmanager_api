@@ -22,3 +22,7 @@ $app->group(
         });
     }
 );
+
+$app->post('v1/user', 'UserController@create');
+
+

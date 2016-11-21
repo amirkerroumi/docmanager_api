@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\DocManagerException;
 use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
@@ -36,7 +37,9 @@ class Authenticate
     public function handle($request, Closure $next, $guard = null)
     {
         if ($this->auth->guard($guard)->guest()) {
-            return response('Unauthorized.', 401);
+            //return response('Unauthorized.', 401);
+            throw new DocManagerException(DocManagerException::DOC_MANAGER_ERROR);
+
         }
 
         return $next($request);

@@ -14,7 +14,7 @@ return [
 
     'guards' => [
         'api' => [
-            'driver' => 'passport',
+            'driver' => 'docmanager-passport',
             'provider' => 'users',
         ],
     ],

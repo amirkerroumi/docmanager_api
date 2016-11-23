@@ -38,7 +38,6 @@ class Authenticate
     {
         if ($this->auth->guard($guard)->guest()) {
             //return response('Unauthorized.', 401);
-            throw new DocManagerException(DocManagerException::DOC_MANAGER_ERROR);
 
         }
 

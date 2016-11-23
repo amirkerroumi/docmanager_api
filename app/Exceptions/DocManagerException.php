@@ -11,13 +11,13 @@ namespace App\Exceptions;
 
 class DocManagerException extends \Exception
 {
-    const DOC_MANAGER_ERROR = 1;
+    const AUTHENTICATION_PROBLEM = 1;
 
 
     protected $customMessage;
     protected $customCode;
     protected $customMessages = [
-        1 => "Custom Error #1 Authentication problem"
+        1 => "Authentication problem"
     ];
     protected $httpMessages = [
         204 => 'No Content',

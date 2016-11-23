@@ -96,11 +96,13 @@ class DocManagerPassportGuard extends TokenGuard
      */
     public function user(Request $request)
     {
-        if ($request->bearerToken()) {
+        if ($request->bearerToken())
+        {
             return $this->authenticateViaBearerToken($request);
         }
-        elseif ($request->cookie(Passport::cookie())) {
-            return $this->authenticateViaCookie($request);
+        else
+        {
+            throw new DocManagerException(DocManagerException::AUTHENTICATION_PROBLEM, "No Access token provided");
         }
     }
 
@@ -117,7 +119,8 @@ class DocManagerPassportGuard extends TokenGuard
         // conversion for us to a Zend Diactoros implementation of the PSR-7 request.
         $psr = (new DiactorosFactory)->createRequest($request);
 
-        try {
+        try
+        {
             $psr = $this->server->validateAuthenticatedRequest($psr);
 
             // If the access token is valid we will retrieve the user according to the user ID
@@ -148,10 +151,25 @@ class DocManagerPassportGuard extends TokenGuard
             }
 
             return $token ? $user->withAccessToken($token) : null;
-        } catch (OAuthServerException $e) {
-            return Container::getInstance()->make(
-                ExceptionHandler::class
-            )->report($e);
+        }
+        catch (OAuthServerException $e)
+        {
+            $hint = $e->getHint();
+            switch($hint)
+            {
+                case "Access token could not be verified"  || "The JWT string must have two dots":
+                    $customMessage = "Access token invalid";
+                    break;
+                case "Access token is invalid":
+                    $customMessage = "Access token expired";
+                    break;
+                default:
+                    $customMessage = "";
+            }
+            throw new DocManagerException(DocManagerException::AUTHENTICATION_PROBLEM, $customMessage, $e->getHttpStatusCode());
+//            return Container::getInstance()->make(
+//                ExceptionHandler::class
+//            )->report($e);
         }
     }
 }

@@ -102,7 +102,7 @@ class DocManagerPassportGuard extends TokenGuard
         }
         else
         {
-            throw new DocManagerException(DocManagerException::AUTHENTICATION_PROBLEM, "No Access token provided");
+            throw new DocManagerException(DocManagerException::MISSING_ACCESS_TOKEN);
         }
     }
 
@@ -157,19 +157,19 @@ class DocManagerPassportGuard extends TokenGuard
             $hint = $e->getHint();
             switch($hint)
             {
-                case "Access token could not be verified"  || "The JWT string must have two dots":
-                    $customMessage = "Access token invalid";
+                case "Access token could not be verified":
+                case "The JWT string must have two dots":
+                    throw new DocManagerException(DocManagerException::INVALID_ACCESS_TOKEN, $e->getHttpStatusCode());
                     break;
                 case "Access token is invalid":
-                    $customMessage = "Access token expired";
+                    throw new DocManagerException(DocManagerException::EXPIRED_ACCESS_TOKEN, $e->getHttpStatusCode());
+                    break;
+                case "Access token has been revoked":
+                    throw new DocManagerException(DocManagerException::REVOKED_ACCESS_TOKEN, $e->getHttpStatusCode());
                     break;
                 default:
-                    $customMessage = "";
+                    throw new DocManagerException(DocManagerException::FAILED_AUTHENTICATION_VIA_TOKEN, $e->getHttpStatusCode());
             }
-            throw new DocManagerException(DocManagerException::AUTHENTICATION_PROBLEM, $customMessage, $e->getHttpStatusCode());
-//            return Container::getInstance()->make(
-//                ExceptionHandler::class
-//            )->report($e);
         }
     }
 }

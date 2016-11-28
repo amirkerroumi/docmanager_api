@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use Validator;
 
@@ -13,6 +14,13 @@ use Dusterio\LumenPassport\LumenPassport;
 
 use App\Exceptions\DocManagerException;
 
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
+use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
 class DocManagerAccessTokenController extends AccessTokenController
 {
     /**
@@ -23,10 +31,6 @@ class DocManagerAccessTokenController extends AccessTokenController
      */
     public function issueToken(ServerRequestInterface $request)
     {
-//        $response = $this->withErrorHandling(function () use ($request) {
-//            return $this->server->respondToAccessTokenRequest($request, new Psr7Response);
-//        });
-
         try
         {
             $response = $this->server->respondToAccessTokenRequest($request, new Psr7Response);
@@ -44,7 +48,17 @@ class DocManagerAccessTokenController extends AccessTokenController
                 }
             }
 
-            return $response;
+            if ($response instanceof PsrResponseInterface) {
+                $response = (new HttpFoundationFactory)->createResponse($response);
+            } elseif (! $response instanceof SymfonyResponse) {
+                $response = new Response($response);
+            } elseif ($response instanceof BinaryFileResponse) {
+                $response = $response->prepare(Request::capture());
+            }
+            $response = json_decode($response->getContent(), true);
+            $data['access_token'] = $response['access_token'];
+            $data['expires_at'] = microtime(true) + $response['expires_in'];
+            return docmanager_response()->success($data);
         }
         catch(\Exception $e)
         {

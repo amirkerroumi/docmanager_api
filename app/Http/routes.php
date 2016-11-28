@@ -18,13 +18,13 @@ $app->post('v1/oauth/token', 'DocManagerAccessTokenController@issueToken');
 $app->post('v1/user', 'UserController@create');
 
 $app->group(
+    // Uses Auth Middleware
     ['prefix' => 'v1', 'middleware' => 'auth'], function () use ($app)
     {
 
         $app->get('/helloWorld', function ()
         {
-            // Uses Auth Middleware
-            return "helloWorld";
+            return docmanager_response()->success('helloWorld');
         });
     }
 );

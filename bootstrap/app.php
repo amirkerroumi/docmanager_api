@@ -1,5 +1,8 @@
 <?php
 
+//Added my own helpers file
+require_once __DIR__.'/../app/Helpers/docmanager_helpers.php';
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 try {
@@ -81,6 +84,7 @@ $app->singleton(
 // $app->register(App\Providers\AppServiceProvider::class);
  $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\DocManagerPassportServiceProvider::class);
+$app->register(App\Providers\DocManagerResponseServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*

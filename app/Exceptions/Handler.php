@@ -3,7 +3,6 @@
 namespace App\Exceptions;
 
 use Exception;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -49,12 +48,7 @@ class Handler extends ExceptionHandler
         switch($e)
         {
             case ($e instanceOf DocManagerException):
-                return response()->json([
-                    'code' => $e->getCode(),
-                    'message' => $e->getMessage(),
-                    'customCode' => $e->getCustomCode(),
-                    'customMessage' => $e->getCustomMessage()
-                ]);
+                return docmanager_response()::error($e);
                 break;
             default:
                 return parent::render($request, $e);

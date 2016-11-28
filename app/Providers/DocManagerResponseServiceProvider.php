@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Providers;
+
+use App\User;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
+use Carbon\Carbon;
+
+use Illuminate\Support\Facades\Response;
+//use Illuminate\Contracts\Routing\ResponseFactory;
+use Laravel\Lumen\Http\ResponseFactory;
+
+use App\Http\DocManagerResponseFactory;
+
+class DocManagerResponseServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+
+    /**
+     * Boot the authentication services for the application.
+     *
+     * @param ResponseFactory $response
+     * @return void
+     */
+    public function boot(DocManagerResponseFactory $response)
+    {
+        $response->macro(
+            'success', function($data, $metadata = [], $status = 200) use($response){
+
+            return $response->json([
+                'timestamp' => microtime(true),
+                'success' => true,
+                'status' => $status,
+                'metadata' => $metadata,
+                'data' => $data
+
+            ]);
+        });
+
+        $response->macro(
+            'error', function($error) use($response){
+
+            return $response->json([
+                'timestamp' => microtime(true),
+                'success' => false,
+                'status' => $error->getCode(),
+                'message' => $error->getMessage(),
+                'code' => $error->getCustomCode(),
+                'info' => $error->getCustomMessage()
+            ]);
+        });
+    }
+}

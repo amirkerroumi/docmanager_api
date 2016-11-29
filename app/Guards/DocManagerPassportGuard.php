@@ -102,7 +102,7 @@ class DocManagerPassportGuard extends TokenGuard
         }
         else
         {
-            throw new DocManagerException(DocManagerException::MISSING_ACCESS_TOKEN);
+            throw new DocManagerException(DocManagerException::MISSING_ACCESS_TOKEN, 400);
         }
     }
 

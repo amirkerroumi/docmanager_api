@@ -84,7 +84,7 @@ class DocManagerAccessTokenController extends AccessTokenController
                         throw new DocManagerException(DocManagerException::INVALID_CLIENT, $e->getHttpStatusCode());
                         break;
                     case "invalid_request":
-                        throw new DocManagerException(DocManagerException::INVALID_REQUEST, $e->getHttpStatusCode(), "Invalid request: ".$e->getHint());
+                        throw new DocManagerException(DocManagerException::INVALID_REQUEST, $e->getHttpStatusCode(), "", $e->getHint());
                         break;
                     default:
                         throw new DocManagerException(DocManagerException::FAILED_ACCESS_TOKEN_ISSUING, $e->getHttpStatusCode());

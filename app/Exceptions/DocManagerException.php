@@ -24,20 +24,20 @@ class DocManagerException extends \Exception
     const FAILED_ACCESS_TOKEN_ISSUING = 11;
 
 
-    protected $customMessage;
     protected $customCode;
+    protected $customHint;
     protected $customMessages = [
-        1 => "Invalid Access Token",
-        2 => "Expired Access Token",
-        3 => "Revoked Access Token",
-        4 => "The user authentication via bearer token has failed",
-        5 => "Bearer access token parameter is missing from the Authorization header",
-        6 => "The user credentials were incorrect. Check the 'username' and 'password' parameters",
-        7 => "Unsupported grant type. (grant_type must be password)",
-        8 => "Client application authentication failed. Check the 'client_id' and 'client_secret' parameters",
-        9 => "Invalid request. Check request parameters",
-        10 => "Incorrect HTTP Content-Type (Content must be of type: x-www-form-urlencoded)",
-        11 => "The attempt to issue an access token has failed"
+        1 => "Invalid access token",
+        2 => "Expired access token",
+        3 => "Revoked access token",
+        4 => "Failed user authentication via token",
+        5 => "Required access token",
+        6 => "Invalid user credentials",
+        7 => "Unsupported grant type",
+        8 => "Failed client authentication",
+        9 => "Invalid request",
+        10 => "Incorrect HTTP Content-Type",
+        11 => "Failed access token request"
 
     ];
     protected $httpMessages = [
@@ -67,28 +67,37 @@ class DocManagerException extends \Exception
         505 => 'HTTP Version Not Supported'
     ];
 
-    public function __construct($customCode = 0, $httpCode = 500, $customMessage = null, $previousException = null)
-    {
-        $this->customCode = $customCode;
-        if($customMessage)
-        {
-            $this->customMessage = $customMessage;
-        }
-        else
-        {
-            $this->setCustomMessage($customCode);
-        }
-        parent::__construct($this->getHttpMessage($httpCode), $httpCode, $previousException);
-    }
+    protected $customHints = [
+        4 => "The user authentication via bearer token has failed",
+        5 => "Bearer access token parameter is missing from the Authorization header",
+        6 => "Check the 'username' and 'password' parameters",
+        7 => "Grant type must be password",
+        8 => "Check the 'client_id' and 'client_secret' parameters in access token request",
+        9 => "Check the request parameters",
+        10 => "Content must be of type: x-www-form-urlencoded"
 
-    public function getHttpMessage($httpCode)
-    {
-        return $this->httpMessages[$httpCode];
-    }
+    ];
 
-    public function getCustomMessage()
+    public function __construct($customCode = 0, $httpCode = 500, $customMessage = null, $customHint = null, $previousException = null)
     {
-        return $this->customMessage;
+        $this->setCustomCode($customCode);
+        $this->setCustomHint($customHint);
+        if(!$customMessage)
+        {
+            if(array_key_exists($this->customCode, $this->customMessages))
+            {
+                $customMessage = $this->customMessages[$this->customCode];
+            }
+            else if(array_key_exists($httpCode, $this->httpMessages))
+            {
+                $customMessage = $this->httpMessages[$httpCode];
+            }
+            else
+            {
+                $customMessage = "";
+            }
+        }
+        parent::__construct($customMessage, $httpCode, $previousException);
     }
 
     public function getCustomCode()
@@ -96,8 +105,29 @@ class DocManagerException extends \Exception
         return $this->customCode;
     }
 
-    public function setCustomMessage($customCode)
+    public function setCustomCode($customCode)
     {
-        $this->customMessage = $this->customMessages[$customCode];
+        $this->customCode = $customCode;
+    }
+
+    public function getCustomHint()
+    {
+        return $this->customHint;
+    }
+
+    public function setCustomHint($customHint)
+    {
+        if($customHint)
+        {
+            $this->customHint = $customHint;
+        }
+        else if(array_key_exists($this->customCode, $this->customHints))
+        {
+            $this->customHint = $this->customHints[$this->customCode];
+        }
+        else
+        {
+            $this->customHint = "";
+        }
     }
 }

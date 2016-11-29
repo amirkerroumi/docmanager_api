@@ -54,9 +54,9 @@ class DocManagerResponseServiceProvider extends ServiceProvider
                 'timestamp' => microtime(true),
                 'success' => false,
                 'status' => $error->getCode(),
-                'message' => $error->getMessage(),
                 'code' => $error->getCustomCode(),
-                'info' => $error->getCustomMessage()
+                'message' => $error->getMessage(),
+                'hint' => $error->getCustomHint()
             ]);
         });
     }

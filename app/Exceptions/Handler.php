@@ -51,7 +51,8 @@ class Handler extends ExceptionHandler
                 return docmanager_response()::error($e);
                 break;
             default:
-                return parent::render($request, $e);
+                //return parent::render($request, $e);
+                return docmanager_response()::php_error($e);
         }
     }
 }

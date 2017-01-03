@@ -36,4 +36,9 @@ class UserController extends Controller
         }
         return "user not created";
     }
+
+    public function getUser(Request $request)
+    {
+        return "OK";
+    }
 }

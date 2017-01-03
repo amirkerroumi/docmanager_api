@@ -56,7 +56,23 @@ class DocManagerResponseServiceProvider extends ServiceProvider
                 'status' => $error->getCode(),
                 'code' => $error->getCustomCode(),
                 'message' => $error->getMessage(),
-                'hint' => $error->getCustomHint()
+                'hint' => $error->getCustomHint(),
+                'error_type' => 'docmanager_error'
+            ]);
+        });
+
+        $response->macro(
+            'php_error', function($error) use($response){
+
+            return $response->json([
+                'timestamp' => microtime(true),
+                'success' => false,
+                'status' => $error->getCode(),
+                'message' => $error->getMessage(),
+                'error_type' => 'php_error',
+                'error_file' => $error->getFile(),
+                'error_line' => $error->getLine(),
+                'error_trace_string' => $error->getTraceAsString()
             ]);
         });
     }

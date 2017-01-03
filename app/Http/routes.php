@@ -17,16 +17,28 @@ $app->post('v1/oauth/token', 'DocManagerAccessTokenController@issueToken');
 
 $app->post('v1/user', 'UserController@create');
 
+/*
+ * IMPORTANT NOTE: UNLIKE LARAVEL, IN LUMEN: ROUTE GROUPS DO NOT INHERIT THE PARENT GROUP'S PROPERTIES
+ * For instance the namespace 'App\Http\Controllers' is already defined
+ * in a group in the config/app.php file. This routes.php file is included inside that group.
+ * Any route inside this file will inherit that namespace unless it's a route that is part
+ * of a new group defined in this file. Any new group defined in this file will have to specify
+ * that namespace again otherwise the Controllers attached to those routes will not be found.
+ */
 $app->group(
-    // Uses Auth Middleware
-    ['prefix' => 'v1', 'middleware' => 'auth'], function () use ($app)
-    {
+// Uses Auth Middleware
+    ['prefix' => 'v1', 'middleware' => 'auth', 'namespace' => 'App\Http\Controllers'], function () use ($app)
+{
 
-        $app->get('/helloWorld', function ()
-        {
-            return docmanager_response()->success('helloWorld');
-        });
-    }
+    $app->get('/helloWorld', function ()
+    {
+        return docmanager_response()->success('helloWorld');
+    });
+
+    $app->get('/user', 'UserController@getUser');
+
+}
 );
+
 
 

@@ -57,7 +57,7 @@ class DocManagerResponseServiceProvider extends ServiceProvider
                 'code' => $error->getCustomCode(),
                 'message' => $error->getMessage(),
                 'hint' => $error->getCustomHint(),
-                'error_type' => 'docmanager_error'
+                'error_type' => $error->getErrorType()
             ]);
         });
 

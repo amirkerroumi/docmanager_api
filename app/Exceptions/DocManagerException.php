@@ -23,7 +23,7 @@ class DocManagerException extends \Exception
     const INCORRECT_CONTENT_TYPE = 10;
     const FAILED_ACCESS_TOKEN_ISSUING = 11;
 
-
+    protected $errorType;
     protected $customCode;
     protected $customHint;
     protected $customMessages = [
@@ -78,8 +78,10 @@ class DocManagerException extends \Exception
 
     ];
 
-    public function __construct($customCode = 0, $httpCode = 500, $customMessage = null, $customHint = null, $previousException = null)
+    public function __construct($customCode = 0, $httpCode = 500, $customMessage = null, $customHint = null, $previousException = null, $userError = false)
     {
+        $errorType = $userError ? "docmanager_user_error" : "docmanager_api_error";
+        $this->setErrorType($errorType);
         $this->setCustomCode($customCode);
         $this->setCustomHint($customHint);
         if(!$customMessage)
@@ -129,5 +131,15 @@ class DocManagerException extends \Exception
         {
             $this->customHint = "";
         }
+    }
+
+    public function setErrorType($errorType)
+    {
+        $this->errorType = $errorType;
+    }
+
+    public function getErrorType()
+    {
+        return $this->errorType;
     }
 }

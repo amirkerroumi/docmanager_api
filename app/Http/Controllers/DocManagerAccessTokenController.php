@@ -67,7 +67,7 @@ class DocManagerAccessTokenController extends AccessTokenController
                 switch($e->getErrorType())
                 {
                     case "invalid_credentials":
-                        throw new DocManagerException(DocManagerException::INVALID_USER_CREDENTIALS, $e->getHttpStatusCode());
+                        throw new DocManagerException(DocManagerException::INVALID_USER_CREDENTIALS, $e->getHttpStatusCode(), null, null, null, true);
                         break;
                     case "unsupported_grant_type":
                         $requestContent = (array) $request->getParsedBody();

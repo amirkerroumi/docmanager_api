@@ -8,6 +8,10 @@
 
 if(!function_exists('docmanager_response'))
 {
+    /*
+     * Calls a custom ResponseFactory class extending Laravel\Lumen\HttpResponseFactory
+     *
+     */
     function docmanager_response()
     {
         return new App\Http\DocManagerResponseFactory();

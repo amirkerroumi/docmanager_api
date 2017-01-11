@@ -31,6 +31,16 @@ class DocManagerAccessTokenController extends AccessTokenController
      */
     public function issueToken(ServerRequestInterface $request)
     {
+        /*
+         * OAuth uses the username field for the authentication even though
+         * the database column is called 'email'
+         * The input parameter is called 'email' instead of 'username' in order to be able to use
+         * the Laravel Validator object and check that the email is unique
+         */
+        $parsedBody = $request->getParsedBody();
+        $parsedBody['username'] = $parsedBody['email'];
+        unset($parsedBody['email']);
+        $request=$request->withParsedBody($parsedBody);
         try
         {
             $response = $this->server->respondToAccessTokenRequest($request, new Psr7Response);
@@ -67,7 +77,9 @@ class DocManagerAccessTokenController extends AccessTokenController
                 switch($e->getErrorType())
                 {
                     case "invalid_credentials":
-                        throw new DocManagerException(DocManagerException::INVALID_USER_CREDENTIALS, $e->getHttpStatusCode(), null, null, null, true);
+                        $userMessages['email'] = [$e->getMessage()];
+                        $userMessages['password'] = [$e->getMessage()];
+                        throw new DocManagerException(DocManagerException::INVALID_USER_CREDENTIALS, $e->getHttpStatusCode(), null, null, null, true, $userMessages);
                         break;
                     case "unsupported_grant_type":
                         $requestContent = (array) $request->getParsedBody();

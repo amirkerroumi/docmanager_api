@@ -22,8 +22,11 @@ class DocManagerException extends \Exception
     const INVALID_REQUEST = 9;
     const INCORRECT_CONTENT_TYPE = 10;
     const FAILED_ACCESS_TOKEN_ISSUING = 11;
+    const INVALID_INPUT = 12;
+
 
     protected $errorType;
+    protected $userMessages;
     protected $customCode;
     protected $customHint;
     protected $customMessages = [
@@ -37,7 +40,8 @@ class DocManagerException extends \Exception
         8 => "Failed client authentication",
         9 => "Invalid request",
         10 => "Incorrect HTTP Content-Type",
-        11 => "Failed access token request"
+        11 => "Failed access token request",
+        12 => "Invalid user input"
 
     ];
     protected $httpMessages = [
@@ -78,12 +82,13 @@ class DocManagerException extends \Exception
 
     ];
 
-    public function __construct($customCode = 0, $httpCode = 500, $customMessage = null, $customHint = null, $previousException = null, $userError = false)
+    public function __construct($customCode = 0, $httpCode = 500, $customMessage = null, $customHint = null, $previousException = null, $userError = false, $userMessages = [])
     {
         $errorType = $userError ? "docmanager_user_error" : "docmanager_api_error";
         $this->setErrorType($errorType);
         $this->setCustomCode($customCode);
         $this->setCustomHint($customHint);
+        $this->setUserMessages($userMessages);
         if(!$customMessage)
         {
             if(array_key_exists($this->customCode, $this->customMessages))
@@ -141,5 +146,15 @@ class DocManagerException extends \Exception
     public function getErrorType()
     {
         return $this->errorType;
+    }
+
+    public function getUserMessages()
+    {
+        return $this->userMessages;
+    }
+
+    public function setUserMessages(array $userMessages)
+    {
+        $this->userMessages = $userMessages;
     }
 }

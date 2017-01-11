@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\DocManagerException;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -27,14 +28,14 @@ class UserController extends Controller
         ]);
         if($validator->fails())
         {
-            return $validator->errors();
+            $errors  = $validator->errors()->toArray();
+            throw new DocManagerException(DocManagerException::INVALID_INPUT, 400, null, null, null, true, $errors);
         }
         else
         {
             $user = \App\User::create(['name' => $request->name, 'email' => $request->email, 'password' => password_hash($request->password, PASSWORD_DEFAULT)]);
-            return $user;
+            return docmanager_response()->success($user);
         }
-        return "user not created";
     }
 
     public function getUser(Request $request)

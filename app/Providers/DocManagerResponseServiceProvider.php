@@ -64,11 +64,11 @@ class DocManagerResponseServiceProvider extends ServiceProvider
 
         $response->macro(
             'php_error', function($error) use($response){
-
+            $statusCode = ($error->getCode() > 0) ? $error->getCode() : 500;
             return $response->json([
                 'timestamp' => microtime(true),
                 'success' => false,
-                'status' => $error->getCode(),
+                'status' => $statusCode,
                 'message' => $error->getMessage(),
                 'error_type' => 'php_error',
                 'error_file' => $error->getFile(),

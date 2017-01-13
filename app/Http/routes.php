@@ -17,6 +17,9 @@ $app->post('v1/oauth/token', 'DocManagerAccessTokenController@issueToken');
 
 $app->post('v1/user', 'UserController@create');
 
+$app->post('v1/password/email', 'PasswordController@postEmail');
+$app->post('v1/password/reset/{token}', 'PasswordController@postReset');
+
 /*
  * IMPORTANT NOTE: UNLIKE LARAVEL, IN LUMEN: ROUTE GROUPS DO NOT INHERIT THE PARENT GROUP'S PROPERTIES
  * For instance the namespace 'App\Http\Controllers' is already defined

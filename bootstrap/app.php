@@ -29,6 +29,9 @@ $app = new Laravel\Lumen\Application(
  $app->withFacades();
 
  $app->withEloquent();
+ $app->configure('services');
+ $app->configure('mail');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -81,7 +84,7 @@ $app->singleton(
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
+ $app->register(App\Providers\AppServiceProvider::class);
  $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\DocManagerPassportServiceProvider::class);
 $app->register(App\Providers\DocManagerResponseServiceProvider::class);
@@ -104,5 +107,11 @@ $app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
 
 $app->register(Laravel\Passport\PassportServiceProvider::class);
 $app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
+
+$app->register(Illuminate\Auth\Passwords\PasswordResetServiceProvider::class);
+$app->register(App\Providers\AppServiceProvider::class);
+$app->register(Illuminate\Mail\MailServiceProvider::class);
+$app->register(Illuminate\Notifications\NotificationServiceProvider::class);
+$app->alias('mailer', \Illuminate\Contracts\Mail\Mailer::class);
 
 return $app;

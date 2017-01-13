@@ -18,7 +18,10 @@ $app->post('v1/oauth/token', 'DocManagerAccessTokenController@issueToken');
 $app->post('v1/user', 'UserController@create');
 
 $app->post('v1/password/email', 'PasswordController@postEmail');
-$app->post('v1/password/reset/{token}', 'PasswordController@postReset');
+$app->get('password/reset/{token}', 'PasswordController@showResetForm');
+$app->post('password/reset', 'PasswordController@postReset');
+
+
 
 /*
  * IMPORTANT NOTE: UNLIKE LARAVEL, IN LUMEN: ROUTE GROUPS DO NOT INHERIT THE PARENT GROUP'S PROPERTIES

@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
 trait ResetsPasswords
@@ -148,7 +149,7 @@ trait ResetsPasswords
      */
     protected function resetPassword($user, $password)
     {
-        $user->password = bcrypt($password);
+        $user->password = Hash::make($password);;
 
         $user->save();
 
@@ -186,5 +187,12 @@ trait ResetsPasswords
     public function getBroker()
     {
         return property_exists($this, 'broker') ? $this->broker : null;
+    }
+
+    public function showResetForm(Request $request, $token = null)
+    {
+        return view('auth.passwords.reset')->with(
+            ['token' => $token]
+        );
     }
 }

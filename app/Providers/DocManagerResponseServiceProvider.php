@@ -35,7 +35,7 @@ class DocManagerResponseServiceProvider extends ServiceProvider
     public function boot(DocManagerResponseFactory $response)
     {
         $response->macro(
-            'success', function($data, $metadata = [], $status = 200) use($response){
+            'success', function($data = [], $metadata = [], $status = 200) use($response){
 
             return $response->json([
                 'timestamp' => microtime(true),

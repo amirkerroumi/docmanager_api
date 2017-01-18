@@ -9,10 +9,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\DocManagerException;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Validator;
 
 trait ResetsPasswords
 {
@@ -35,7 +37,12 @@ trait ResetsPasswords
      */
     public function sendResetLinkEmail(Request $request)
     {
-        $this->validate($request, ['email' => 'required|email']);
+        $validator = Validator::make($request->all(), ['email' => 'required|email']);
+        if($validator->fails())
+        {
+            $errors = $validator->errors()->toArray();
+            throw new DocManagerException(DocManagerException::INVALID_INPUT, 400, null, null, null, true, $errors);
+        }
 
         $broker = $this->getBroker();
 
@@ -45,11 +52,11 @@ trait ResetsPasswords
 
         switch ($response) {
             case Password::RESET_LINK_SENT:
-                return $this->getSendResetLinkEmailSuccessResponse($response);
-
+                return docmanager_response()::success();
             case Password::INVALID_USER:
+                throw new DocManagerException(DocManagerException::INVALID_INPUT, 400, null, null, null, true, ['email' => 'No account is registered for this email']);
             default:
-                return $this->getSendResetLinkEmailFailureResponse($response);
+                throw new DocManagerException(DocManagerException::FAILED_PASSWORD_RESET_REQUEST, 500);
         }
     }
 
@@ -105,7 +112,13 @@ trait ResetsPasswords
      */
     public function reset(Request $request)
     {
-        $this->validate($request, $this->getResetValidationRules());
+        $validator = Validator::make($request->all(), $this->getResetValidationRules());
+        if($validator->fails())
+        {
+            $errors  = $validator->errors()->toArray();
+            return view('auth.passwords.reset', ['errors' => $errors, 'token' => $request->input('token'), 'email' => $request->input('email')]);
+        }
+//        $this->validate($request, $this->getResetValidationRules());
 
         $credentials = $request->only(
             'email', 'password', 'password_confirmation', 'token'
@@ -120,9 +133,17 @@ trait ResetsPasswords
         switch ($response) {
             case Password::PASSWORD_RESET:
                 return $this->getResetSuccessResponse($response);
-
+            case Password::INVALID_TOKEN:
+                $validator->errors()->add('token','Expired Token');
+//                return redirect('/password/reset')->withInput()->withErrors($validator);
+                return view('auth.passwords.reset', ['errors' => $validator->errors()->toArray(), 'token' => $request->input('token'), 'email' => $request->input('email')]);
+            case Password::INVALID_USER:
+                //User does not exist
+                $validator->errors()->add('email','User does not exist');
+                return view('auth.passwords.reset', ['errors' => $validator->errors()->toArray(), 'token' => $request->input('token'), 'email' => $request->input('email')]);
             default:
-                return $this->getResetFailureResponse($request, $response);
+                return view('errors.404', ['errorMsg' => "It seems like something went wrong... Please try again."]);
+//                return $this->getResetFailureResponse($request, $response);
         }
     }
 

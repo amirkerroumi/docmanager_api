@@ -23,6 +23,7 @@ class DocManagerException extends \Exception
     const INCORRECT_CONTENT_TYPE = 10;
     const FAILED_ACCESS_TOKEN_ISSUING = 11;
     const INVALID_INPUT = 12;
+    const FAILED_PASSWORD_RESET_REQUEST = 13;
 
 
     protected $errorType;
@@ -41,7 +42,8 @@ class DocManagerException extends \Exception
         9 => "Invalid request",
         10 => "Incorrect HTTP Content-Type",
         11 => "Failed access token request",
-        12 => "Invalid user input"
+        12 => "Invalid user input",
+        13 => "Failed password reset request"
 
     ];
     protected $httpMessages = [

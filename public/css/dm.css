@@ -1,0 +1,168 @@
+.container-fluid
+{
+    margin: 0;
+    padding: 0;
+}
+
+html
+{
+    /*background-color: #e3e3e3;*/
+}
+
+a:hover, a:active, a:focus, a:visited
+{
+    color: deepskyblue;
+}
+
+/*----------------------------------------------------------NAV BAR & FOOTER----------------------------------------------------------------------*/
+
+
+.dm-nav-bar
+{
+    border-bottom: 2px solid deepskyblue;
+    background-color: white;
+}
+.dm-link > li > a, .dm-link, .dm-link:hover
+{
+    color: deepskyblue;
+    font-family: Avenir;
+    font-weight: bold;
+}
+
+.dm-nav-bar .dm-link>li>a, .dm-nav-bar .dm-link>li>a:hover, .dm-nav-bar .dm-link>li>a:active, .dm-nav-bar .dm-link>li>a:focus
+{
+    color: deepskyblue;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 80%;
+    height: 6%;
+    /*background-color: #e3e3e3;*/
+    background-color: transparent;
+    font-weight: bold;
+    border-top: 1px solid deepskyblue;
+    color: deepskyblue;
+    text-align: center;
+}
+
+.footer-left
+{
+    text-align: left;
+    padding-top: 4px;
+}
+
+.footer-center, .footer-right
+{
+    padding-top: 8px;
+}
+
+.footer-right
+{
+    text-align: right;
+}
+/*----------------------------------------------------------HOMEPAGE----------------------------------------------------------------------*/
+.dm-homepage
+{
+    background: url("../pics/bg.jpeg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.dm-homepage-content
+{
+    background: rgba(0,0,0,0.6);
+    color: deepskyblue;
+    text-align: center;
+    border-bottom: 2px solid deepskyblue;
+}
+
+.p-jumbotron
+{
+    font-size: 2vw;
+    color: white;
+    padding-left:10%;
+    padding-right: 10%;
+}
+
+/*----------------------------------------------------------LOGOS & BUTTONS----------------------------------------------------------------------*/
+.small-logo
+{
+    width: 30px;
+    height: 30px;
+}
+
+.medium-logo
+{
+    width: 18%;
+    height: 18%;
+}
+
+.dm-btn
+{
+    background-color: deepskyblue;
+    border-color: #00abe5;
+    color: white;
+    font-family: Avenir;
+    font-weight: bold;
+}
+
+.dm-btn:hover, .dm-btn:focus
+{
+    background-color: #00abe5;
+    border-color: #00abe5;
+    color: white;
+}
+
+.dm-btn:active
+{
+    background-color: #0098cc;
+    border-color: #0098cc;
+    color: white;
+}
+
+#MyNavBarCollapse > ul > li > .dm-nav-btn-link
+{
+    padding: 0;
+    margin-left: 4px;
+}
+
+.dm-btn-default, .dm-btn-default:hover
+{
+    background-color: white;
+    border-color: deepskyblue;
+    color: deepskyblue;
+}
+
+/*----------------------------------------------------------LOG IN PAGE----------------------------------------------------------------------*/
+
+#dm-login-page
+{
+    color: deepskyblue;
+}
+
+#dm-login-page > .panel
+{
+    width: 40%;
+    margin: auto;
+    margin-top: 10%;
+    border-color: deepskyblue;
+}
+
+#dm-login-page > .dm-btn
+{
+    width: 400px;
+}
+
+#dm-login-page > .dm-error-panel
+{
+    color: red;
+    text-align: center;
+    border: 0;
+    padding-top: 10%;
+}

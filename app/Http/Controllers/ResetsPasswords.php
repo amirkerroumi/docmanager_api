@@ -52,9 +52,9 @@ trait ResetsPasswords
 
         switch ($response) {
             case Password::RESET_LINK_SENT:
-                //return docmanager_response()::success();
+                return docmanager_response()::success();
             //TODO
-                return view('auth.passwords.reset', ['password_reset' => true]);
+//                return view('auth.passwords.reset', ['password_reset' => true]);
             case Password::INVALID_USER:
                 throw new DocManagerException(DocManagerException::INVALID_INPUT, 400, null, null, null, true, ['email' => 'No account is registered for this email']);
             default:
@@ -134,7 +134,8 @@ trait ResetsPasswords
 
         switch ($response) {
             case Password::PASSWORD_RESET:
-                return $this->getResetSuccessResponse($response);
+                //return $this->getResetSuccessResponse($response);
+                return view('auth.passwords.reset', ['password_reset' => true]);
             case Password::INVALID_TOKEN:
                 $validator->errors()->add('token','Expired Token');
 //                return redirect('/password/reset')->withInput()->withErrors($validator);

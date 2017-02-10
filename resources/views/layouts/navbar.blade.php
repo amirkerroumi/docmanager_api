@@ -14,17 +14,17 @@
       </button>
 
       <!--Brand Logo-->
-      <a class="navbar-brand" href="{{ url('/') }}"><img src="/pics/dm-icon.png" class="small-logo"></a>
+      <a class="navbar-brand" href="{{ env('WEB_APP_ENDPOINT', 'http://web.docmanager.app') . '/' }}"><img src="/pics/dm-icon.png" class="small-logo"></a>
     </div>
 
     <!--NAVBAR MENU-->
     <div class="collapse navbar-collapse" id="MyNavBarCollapse">
       <!--Set of buttons aligned to the right-->
       <ul class="nav navbar-nav navbar-right dm-link">
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
-        <li><a href="{{ url('/login') }}" class="dm-nav-btn-link"><button type="button" class="btn navbar-btn dm-btn-default">Sign in</button></a></li>
-        <li><a href="{{ url('/register') }}" class="dm-nav-btn-link"><button type="button" class="btn navbar-btn dm-btn">Sign up</button></a></li>
+        <li><a href="{{ env('WEB_APP_ENDPOINT', 'http://web.docmanager.app') . '/' }}">About</a></li>
+        <li><a href="{{ env('WEB_APP_ENDPOINT', 'http://web.docmanager.app') . '/' }}">Contact</a></li>
+        <li><a href="{{ env('WEB_APP_ENDPOINT', 'http://web.docmanager.app').'/login' }}" class="dm-nav-btn-link"><button type="button" class="btn navbar-btn dm-btn-default">Sign in</button></a></li>
+        <li><a href="{{env('WEB_APP_ENDPOINT', 'http://web.docmanager.app'). '/register' }}" class="dm-nav-btn-link"><button type="button" class="btn navbar-btn dm-btn">Sign up</button></a></li>
       </ul>
     </div>
 
